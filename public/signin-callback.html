@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Waiting...</title>
+  </head>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol';
+    }
+
+    body {
+      padding: 2rem;
+      height: 100vh;
+      background-color: #f5f6fa;
+    }
+
+    a {
+      color: rgb(88, 88, 252);
+    }
+
+    #title {
+      margin-bottom: 2rem;
+      color: black;
+      text-align: center;
+      font-weight: 400;
+    }
+
+    #message {
+      margin-bottom: 1rem;
+    }
+
+    .wrapper {
+      margin-inline: auto;
+      max-width: 36rem;
+      padding: 1rem;
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0px 0px 10px -5px rgb(199, 199, 199);
+      border: 1px solid #eee;
+    }
+  </style>
+  <body>
+    <h1 id="title"></h1>
+    <div class="wrapper">
+      <p id="message"></p>
+      <a href="/">Go back</a>
+    </div>
+    <script src="js/oidc-client.min.js"></script>
+    <script>
+      const message = document.getElementById('message');
+
+      const mgr = new Oidc.UserManager({
+        response_mode: 'query',
+      })
+        .signinRedirectCallback()
+        .then(function (ctx) {
+          message.innerText =
+            'You have successfully signed in. You will be automatically redirected shortly to the application';
+          window.location.href = ctx.state?.returnUrl || '/';
+        })
+        .catch(function (err) {
+          const title = document.getElementById('title');
+          title.innerText = 'Authorization Error';
+          message.innerText = err.message;
+        });
+    </script>
+  </body>
+</html>
